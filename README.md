@@ -56,11 +56,11 @@ enum CardType {
 You can interact with an extracted card type to update your form:
 ```swift
 let visa: CardType = .visa
-visa.prefixValid("4") //true
-visa.valid("4")       //false
-visa.cvvLength        //3
-visa.segmentGroupings //[4, 4, 4, 4]
-visa.maxLength        //19
+visa.isPrefixValid("4") //true
+visa.isValid("4")       //false
+visa.cvvLength          //3
+visa.segmentGroupings   //[4, 4, 4, 4]
+visa.maxLength          //19
 ```
 
 ### Card State
