@@ -80,8 +80,8 @@ enum CardType {
 fileprivate extension CardType {
 
     struct ValidationRequirement {
-        var prefixes = [PrefixContainable]()
-        var lengths = [Int]()
+        let prefixes: [PrefixContainable]
+        let lengths: [Int]
 
         func isValid(_ accountNumber: String) -> Bool {
             return isLengthValid(accountNumber) && isPrefixValid(accountNumber)
