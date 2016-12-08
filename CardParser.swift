@@ -20,7 +20,7 @@ enum CardType {
     static let allValues: [CardType] = [.visa, .masterCard, .amex, .diners, .discover, .jcb]
 
     private var validationRequirements: ValidationRequirement {
-        var prefix = [PrefixContainable](), length = [Int]()
+        let prefix: [PrefixContainable], length: [Int]
 
         switch self {
         /* // IIN prefixes and length requriements retreived from https://en.wikipedia.org/wiki/Bank_card_number on June 28, 2016 */
