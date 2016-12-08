@@ -67,12 +67,12 @@ enum CardType {
         }
     }
 
-    func valid(_ accountNumber: String) -> Bool {
-        return validationRequirements.valid(accountNumber) && CardType.luhnCheck(accountNumber)
+    func isValid(_ accountNumber: String) -> Bool {
+        return validationRequirements.isValid(accountNumber) && CardType.luhnCheck(accountNumber)
     }
 
-    func prefixValid(_ accountNumber: String) -> Bool {
-        return validationRequirements.prefixValid(accountNumber)
+    func isPrefixValid(_ accountNumber: String) -> Bool {
+        return validationRequirements.isPrefixValid(accountNumber)
     }
 
 }
@@ -83,16 +83,16 @@ fileprivate extension CardType {
         var prefixes = [PrefixContainable]()
         var lengths = [Int]()
 
-        func valid(_ accountNumber: String) -> Bool {
-            return lengthValid(accountNumber) && prefixValid(accountNumber)
+        func isValid(_ accountNumber: String) -> Bool {
+            return isLengthValid(accountNumber) && isPrefixValid(accountNumber)
         }
 
-        func prefixValid(_ accountNumber: String) -> Bool {
+        func isPrefixValid(_ accountNumber: String) -> Bool {
             guard prefixes.count > 0 else { return true }
-            return prefixes.contains { $0.hasCommonPrefix(accountNumber) }
+            return prefixes.contains { $0.hasCommonPrefix(with: accountNumber) }
         }
 
-        func lengthValid(_ accountNumber: String) -> Bool {
+        func isLengthValid(_ accountNumber: String) -> Bool {
             guard lengths.count > 0 else { return true }
             return lengths.contains { accountNumber.length == $0 }
         }
@@ -136,7 +136,7 @@ func ==(lhs: CardState, rhs: CardState) -> Bool {
 extension CardState {
 
     init(fromNumber number: String) {
-        if let card = CardType.allValues.first(where: { $0.valid(number) }) {
+        if let card = CardType.allValues.first(where: { $0.isValid(number) }) {
             self = .identified(card)
         }
         else {
@@ -145,7 +145,7 @@ extension CardState {
     }
 
     init(fromPrefix prefix: String) {
-        let possibleTypes = CardType.allValues.filter { $0.prefixValid(prefix) }
+        let possibleTypes = CardType.allValues.filter { $0.isPrefixValid(prefix) }
         if possibleTypes.count >= 2 {
             self = .indeterminate(possibleTypes)
         }
@@ -163,13 +163,13 @@ extension CardState {
 
 fileprivate protocol PrefixContainable {
 
-    func hasCommonPrefix(_ text: String) -> Bool
+    func hasCommonPrefix(with text: String) -> Bool
 
 }
 
 extension ClosedRange: PrefixContainable {
 
-    func hasCommonPrefix(_ text: String) -> Bool {
+    func hasCommonPrefix(with text: String) -> Bool {
         //cannot include Where clause in protocol conformance, so have to ensure Bound == String :(
         guard let lower = lowerBound as? String, let upper = upperBound as? String else { return false }
 
@@ -188,7 +188,7 @@ extension ClosedRange: PrefixContainable {
 
 extension String: PrefixContainable {
 
-    func hasCommonPrefix(_ text: String) -> Bool {
+    func hasCommonPrefix(with text: String) -> Bool {
         return hasPrefix(text) || text.hasPrefix(self)
     }
 
