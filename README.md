@@ -1,4 +1,4 @@
-#CardParser 
+# CardParser 
 
 *Credit Card Type Parsing for Swift*
 
@@ -99,7 +99,7 @@ func cardImage(forState cardState:CardState) -> UIImage? {
 
 ## Author
 
-Jay Clark: <mailto:jason.clark@raizlabs.com>
+Jay Clark: <jason.clark@raizlabs.com>
 
 ## License
 
